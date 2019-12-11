@@ -1,5 +1,5 @@
 [package]
-name = "dir_assert"
+name    = "dir_assert"
 version = "0.1.0"
 authors = ["Łukasz Biel <lukasz.biel@anixe.pl>"]
 edition = "2018"

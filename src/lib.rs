@@ -1,25 +1,20 @@
-#![feature(try_trait)]
 //! Compare contents of two directories.
-//!
-//!
 
-mod assert_dirs;
+mod assert_paths;
 mod error;
-mod test_result;
 
-pub use crate::assert_dirs::assert_dirs;
+pub use crate::assert_paths::assert_paths;
 pub use crate::error::Error;
-pub use crate::test_result::TestResult;
 
 #[macro_export]
-macro_rules! assert_dirs {
+macro_rules! assert_paths {
     (actual: expr, expected: expr) => {
-        let test_result = dir_assert::assert_dirs(actual, expected);
+        let test_result = $crate::assert_paths(actual, expected);
 
         assert!(
-            !test_result.result,
+            test_result.is_empty(),
             "\nfile mismatch:\n{:#?}\n",
-            test_result.errors
+            test_result
         );
     };
 }
