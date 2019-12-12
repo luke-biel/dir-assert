@@ -115,7 +115,9 @@ fn get_file_type(path: &DirEntry) -> Result<FileType, Error> {
 
 fn dir_contents_sorted<P: AsRef<Path>>(dir: &P) -> Result<Vec<DirEntry>, Error> {
     let mut dir_contents = std::fs::read_dir(&dir)
-        .map_err(|err| Error::new_critical(format!("failed reading dir {:?}, {}", dir.as_ref(), err)))?
+        .map_err(|err| {
+            Error::new_critical(format!("failed reading dir {:?}, {}", dir.as_ref(), err))
+        })?
         .collect::<Result<Vec<_>, _>>()
         .map_err(|err| {
             Error::new_critical(format!(
@@ -135,7 +137,10 @@ fn compare_file<PE: AsRef<Path>, PA: AsRef<Path>>(expected: PE, actual: PA) -> R
     let a_hash = file_hash(&actual);
 
     if e_hash != a_hash {
-        Err(Error::new_file_contents_mismatch(expected.as_ref(), actual.as_ref()))
+        Err(Error::new_file_contents_mismatch(
+            expected.as_ref(),
+            actual.as_ref(),
+        ))
     } else {
         Ok(())
     }
