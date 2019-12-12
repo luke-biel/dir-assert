@@ -48,10 +48,10 @@ mod when_dir_contents_do_not_match {
             test_root().join(case.dir).join("actual"),
             test_root().join(case.dir).join("expected"),
         )
-            .unwrap_err()
-            .into_iter()
-            .map(|e| e.to_string())
-            .collect::<Vec<_>>();
+        .unwrap_err()
+        .into_iter()
+        .map(|e| e.to_string())
+        .collect::<Vec<_>>();
 
         let expected = case
             .expected
@@ -166,12 +166,8 @@ mod when_dir_contents_do_not_match {
     #[should_panic]
     fn panics() {
         assert_paths!(
-            test_root()
-                .join("extra_elements")
-                .join("actual"),
-            test_root()
-                .join("extra_elements")
-                .join("expected")
+            test_root().join("extra_elements").join("actual"),
+            test_root().join("extra_elements").join("expected")
         );
     }
 }
