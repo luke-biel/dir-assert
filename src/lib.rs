@@ -10,7 +10,7 @@ pub use crate::error::Error;
 macro_rules! assert_paths {
     ($actual: expr, $expected: expr) => {{
         match $crate::assert_paths($actual, $expected) {
-            Ok(_) => {}
+            Ok(_) => { /* do nothing */ }
             Err(test_result) => panic!("file mismatch\n{:#?}", test_result),
         }
     }};
