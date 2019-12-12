@@ -8,13 +8,10 @@ pub use crate::error::Error;
 
 #[macro_export]
 macro_rules! assert_paths {
-    (actual: expr, expected: expr) => {
-        let test_result = $crate::assert_paths(actual, expected);
-
-        assert!(
-            test_result.is_empty(),
-            "\nfile mismatch:\n{:#?}\n",
-            test_result
-        );
-    };
+    ($actual: expr, $expected: expr) => {{
+        match $crate::assert_paths($actual, $expected) {
+            Ok(_) => {}
+            Err(test_result) => panic!("file mismatch\n{:#?}", test_result),
+        }
+    }};
 }

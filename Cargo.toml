@@ -8,3 +8,6 @@ edition = "2018"
 
 [dependencies]
 twox-hash = { version = "1.5.0", default-features = false }
+
+[dev-dependencies]
+test-case = "1.0.0-alpha-1"

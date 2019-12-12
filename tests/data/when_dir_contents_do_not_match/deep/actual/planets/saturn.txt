@@ -1,0 +1,6 @@
+Saturn:
+    Aphelion: 1,514.50 million km (10.1238 AU)
+    Perihelion: 1,352.55 million km (9.0412 AU)
+    Orbital period: 29.4571 yr
+    Synodic period: 378.09 days
+    Average orbital speed: 9.68 km/s

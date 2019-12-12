@@ -1,0 +1,6 @@
+Jupiter:
+    Aphelion: 816.62 million km (5.4588 AU)
+    Perihelion: 740.52 million km (4.9501 AU)
+    Orbital period: 11.862 yr
+    Synodic period: 398.88 d
+    Average orbital speed: 13.07 km/s
