@@ -43,6 +43,27 @@ mod when_dir_contents_do_not_match {
         super::test_root().join("when_dir_contents_do_not_match")
     }
 
+    fn run(case: TestCase) {
+        let actual = assert_paths(
+            test_root().join(case.dir).join("actual"),
+            test_root().join(case.dir).join("expected"),
+        )
+            .unwrap_err()
+            .into_iter()
+            .map(|e| e.to_string())
+            .collect::<Vec<_>>();
+
+        let expected = case
+            .expected
+            .lines()
+            .map(|l| l.trim())
+            .filter(|l| !l.is_empty())
+            .map(ToString::to_string)
+            .collect::<Vec<_>>();
+
+        assert_eq!(actual, expected)
+    }
+
     struct TestCase {
         dir: &'static str,
         expected: &'static str,
@@ -119,29 +140,26 @@ mod when_dir_contents_do_not_match {
     #[test_case(CASE_3 ; "when files have different contents")]
     #[test_case(CASE_4 ; "when actual path is missing")]
     #[test_case(CASE_5 ; "when expected path is missing")]
-    #[test_case(CASE_6 ; "when expected contains extra elements")]
-    #[test_case(CASE_7 ; "when actual contains extra elements")]
     #[test_case(CASE_8 ; "when compared items inside directory have different kind")]
     #[test_case(CASE_9 ; "when errors come from many levels")]
     fn is_err(case: TestCase) {
-        let actual = assert_paths(
-            test_root().join(case.dir).join("actual"),
-            test_root().join(case.dir).join("expected"),
-        )
-        .unwrap_err()
-        .into_iter()
-        .map(|e| e.to_string())
-        .collect::<Vec<_>>();
+        run(case)
+    }
 
-        let expected = case
-            .expected
-            .lines()
-            .map(|l| l.trim())
-            .filter(|l| !l.is_empty())
-            .map(ToString::to_string)
-            .collect::<Vec<_>>();
+    #[test]
+    fn when_expected_contains_extra_elements() -> Result<(), std::io::Error> {
+        let path = test_root().join(CASE_6.dir).join("actual");
+        std::fs::create_dir_all(&path)?;
+        run(CASE_6);
+        std::fs::remove_dir_all(&path)
+    }
 
-        assert_eq!(actual, expected)
+    #[test]
+    fn when_actual_contains_extra_elements() -> Result<(), std::io::Error> {
+        let path = test_root().join(CASE_7.dir).join("expected");
+        std::fs::create_dir_all(&path)?;
+        run(CASE_7);
+        std::fs::remove_dir_all(&path)
     }
 
     #[test]
