@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Error",""]],"fn":[["assert_paths","Recursively scan contents of two directories and find differences."]],"macro":[["assert_paths","Recursively scan contents of two directories and find differences."]]});
