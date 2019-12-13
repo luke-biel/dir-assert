@@ -3,11 +3,17 @@ use std::path::PathBuf;
 
 #[derive(Debug, Clone)]
 pub enum Error {
+    /// Error with system IO, unrecoverable, ceasing traverse of current directory
     Critical(String),
+    /// Extra expected item exists
     ExtraExpected(PathBuf),
+    /// Extra actual item exists
     ExtraActual(PathBuf),
+    /// Found filename and directory sharing same name and path
     InvalidComparison { expected: PathBuf, actual: PathBuf },
+    /// Two files with same path have different contents
     FileContentsMismatch { expected: PathBuf, actual: PathBuf },
+    /// Top level directories are missing (eg. actual folder wasn't actually created)
     MissingPath(PathBuf),
 }
 

@@ -8,6 +8,19 @@ use std::{
     path::Path,
 };
 
+/// Recursively scan contents of two directories and find differences.
+///
+/// eg.:
+/// ```rust,ignore
+/// #[test]
+/// fn should_directories_be_equal() {
+///     let result = assert_paths("actual", "expected");
+///     assert!(result.is_ok());
+/// }
+/// ```
+///
+/// This function is called inside `assert_paths` macro invocation.
+/// It can be used to verify types of errors returned when types differ.
 pub fn assert_paths<PE: AsRef<Path>, PA: AsRef<Path>>(
     actual: PA,
     expected: PE,
