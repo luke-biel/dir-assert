@@ -3,6 +3,15 @@ name    = "dir-assert"
 version = "0.1.0"
 authors = ["Łukasz Biel <lukasz.p.biel@gmail.com>"]
 edition = "2018"
+description = "Assertion to compare directories recursively"
+readme = "README.md"
+license = "MIT"
+documentation = "https://luke-biel.github.io/dir-assert"
+homepage = "https://luke-biel.github.io/dir-assert"
+repository = "https://github.com/luke-biel/dir-assert"
+
+[badges]
+travis-ci = { repository = "luke-biel/dir-assert", branch = "master" }
 
 [dev-dependencies]
 test-case = "1.0.0-alpha-1"
