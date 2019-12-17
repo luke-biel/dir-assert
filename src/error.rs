@@ -12,7 +12,11 @@ pub enum Error {
     /// Found filename and directory sharing same name and path
     InvalidComparison { expected: PathBuf, actual: PathBuf },
     /// Two files with same path have different contents
-    FileContentsMismatch { expected: PathBuf, actual: PathBuf },
+    FileContentsMismatch {
+        expected: PathBuf,
+        actual: PathBuf,
+        line: usize,
+    },
     /// Top level directories are missing (eg. actual folder wasn't actually created)
     MissingPath(PathBuf),
 }
@@ -36,10 +40,14 @@ impl fmt::Display for Error {
                 "comparing directories and files will not work with {:?} and {:?}",
                 actual, expected
             ),
-            Error::FileContentsMismatch { actual, expected } => write!(
+            Error::FileContentsMismatch {
+                actual,
+                expected,
+                line,
+            } => write!(
                 f,
-                "files {:?} and {:?} have different contents",
-                actual, expected
+                "files {:?} and {:?} differ on line {}",
+                actual, expected, line
             ),
             Error::MissingPath(path) => write!(f, "path {:?} not found", path),
         }
@@ -72,10 +80,12 @@ impl Error {
     pub fn new_file_contents_mismatch<PE: Into<PathBuf>, PA: Into<PathBuf>>(
         expected: PE,
         actual: PA,
+        line: usize,
     ) -> Self {
         Error::FileContentsMismatch {
             expected: expected.into(),
             actual: actual.into(),
+            line,
         }
     }
 

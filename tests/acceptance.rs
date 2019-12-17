@@ -56,7 +56,7 @@ mod when_dir_contents_do_not_match {
         let expected = case
             .expected
             .lines()
-            .map(|l| l.trim())
+            .map(str::trim)
             .filter(|l| !l.is_empty())
             .map(ToString::to_string)
             .collect::<Vec<_>>();
@@ -87,7 +87,7 @@ mod when_dir_contents_do_not_match {
     const CASE_3: TestCase = TestCase {
         dir: "different_contents",
         expected: r#"
-            files "tests/data/when_dir_contents_do_not_match/different_contents/actual/sun.txt" and "tests/data/when_dir_contents_do_not_match/different_contents/expected/sun.txt" have different contents
+            files "tests/data/when_dir_contents_do_not_match/different_contents/actual/sun.txt" and "tests/data/when_dir_contents_do_not_match/different_contents/expected/sun.txt" differ on line 1
         "#,
     };
 
@@ -131,7 +131,7 @@ mod when_dir_contents_do_not_match {
         expected: r#"
             found expected file "tests/data/when_dir_contents_do_not_match/deep/expected/planets/jupiter.txt" with no counterpart in actual
             found actual file "tests/data/when_dir_contents_do_not_match/deep/actual/planets/saturn.txt" with no counterpart in expected
-            files "tests/data/when_dir_contents_do_not_match/deep/actual/sun.txt" and "tests/data/when_dir_contents_do_not_match/deep/expected/sun.txt" have different contents
+            files "tests/data/when_dir_contents_do_not_match/deep/actual/sun.txt" and "tests/data/when_dir_contents_do_not_match/deep/expected/sun.txt" differ on line 0
         "#,
     };
 

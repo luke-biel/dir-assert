@@ -1,7 +1,6 @@
 //! Compare contents of two directories.
 //!
 //! This crate provides macro and function for asserting whether two directories or files are equal.
-//!
 
 mod assert_paths;
 mod error;

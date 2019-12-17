@@ -1,10 +1,9 @@
 use crate::Error;
 use std::fs::FileType;
+use std::io::{BufRead, BufReader};
 use std::{
     cmp::Ordering,
     fs::{DirEntry, File},
-    hash::Hasher,
-    io::Read,
     path::Path,
 };
 
@@ -146,34 +145,46 @@ fn dir_contents_sorted<P: AsRef<Path>>(dir: &P) -> Result<Vec<DirEntry>, Error> 
 }
 
 fn compare_file<PE: AsRef<Path>, PA: AsRef<Path>>(expected: PE, actual: PA) -> Result<(), Error> {
-    let e_hash = file_hash(&expected);
-    let a_hash = file_hash(&actual);
+    let expected = expected.as_ref();
+    let actual = actual.as_ref();
 
-    if e_hash != a_hash {
-        Err(Error::new_file_contents_mismatch(
-            expected.as_ref(),
-            actual.as_ref(),
+    let file_e = File::open(expected).map_err(|e| {
+        Error::new_critical(format!(
+            "cannot open expected file {:?}, reason: {}",
+            expected, e
         ))
-    } else {
-        Ok(())
+    })?;
+    let file_a = File::open(actual).map_err(|e| {
+        Error::new_critical(format!(
+            "cannot open actual file {:?}, reason: {}",
+            actual, e
+        ))
+    })?;
+
+    let reader_e = BufReader::new(file_e);
+    let reader_a = BufReader::new(file_a);
+
+    for (idx, lines) in reader_e.lines().zip(reader_a.lines()).enumerate() {
+        let (line_e, line_a) = match lines {
+            (Ok(line_e), Ok(line_a)) => (line_e, line_a),
+            (Err(err), _) => {
+                return Err(Error::new_critical(format!(
+                    "failed reading line from {:?}, reason: {}",
+                    expected, err
+                )))
+            }
+            (_, Err(err)) => {
+                return Err(Error::new_critical(format!(
+                    "failed reading line from {:?}, reason: {}",
+                    actual, err
+                )))
+            }
+        };
+
+        if line_e != line_a {
+            return Err(Error::new_file_contents_mismatch(expected, actual, idx));
+        }
     }
-}
 
-fn file_hash<P: AsRef<Path>>(path: P) -> u64 {
-    use twox_hash::XxHash;
-
-    let mut hasher = XxHash::default();
-
-    let mut file = File::open(path).expect("expected open");
-    let mut buf = [0u8; 1024];
-    let mut len: usize;
-
-    while {
-        len = file.read(&mut buf).expect("read");
-        len != 0
-    } {
-        hasher.write(&buf[..len]);
-    }
-
-    hasher.finish()
+    Ok(())
 }
