@@ -59,6 +59,7 @@ mod when_dir_contents_do_not_match {
             .map(str::trim)
             .filter(|l| !l.is_empty())
             .map(ToString::to_string)
+            .map(|s| s.replace('/', &std::path::MAIN_SEPARATOR.to_string()))
             .collect::<Vec<_>>();
 
         assert_eq!(actual, expected)

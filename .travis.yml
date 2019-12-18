@@ -27,3 +27,4 @@ deploy:
   on:
     branch: master
     rust: stable
+    os: linux
