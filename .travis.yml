@@ -23,7 +23,7 @@ deploy:
   provider: pages
   local_dir: target/doc
   token: $GH_TOKEN
-  cleanup: false
+  skip_cleanup: true
   keep_history: true
   on:
     branch: master
