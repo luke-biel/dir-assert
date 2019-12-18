@@ -55,19 +55,19 @@ impl fmt::Display for Error {
 }
 
 impl Error {
-    pub fn new_critical<S: Into<String>>(message: S) -> Self {
+    pub(crate) fn new_critical<S: Into<String>>(message: S) -> Self {
         Error::Critical(message.into())
     }
 
-    pub fn new_extra_expected<P: Into<PathBuf>>(path: P) -> Self {
+    pub(crate) fn new_extra_expected<P: Into<PathBuf>>(path: P) -> Self {
         Error::ExtraExpected(path.into())
     }
 
-    pub fn new_extra_actual<P: Into<PathBuf>>(path: P) -> Self {
+    pub(crate) fn new_extra_actual<P: Into<PathBuf>>(path: P) -> Self {
         Error::ExtraActual(path.into())
     }
 
-    pub fn new_invalid_comparison<PE: Into<PathBuf>, PA: Into<PathBuf>>(
+    pub(crate) fn new_invalid_comparison<PE: Into<PathBuf>, PA: Into<PathBuf>>(
         expected: PE,
         actual: PA,
     ) -> Self {
@@ -77,7 +77,7 @@ impl Error {
         }
     }
 
-    pub fn new_file_contents_mismatch<PE: Into<PathBuf>, PA: Into<PathBuf>>(
+    pub(crate) fn new_file_contents_mismatch<PE: Into<PathBuf>, PA: Into<PathBuf>>(
         expected: PE,
         actual: PA,
         line: usize,
@@ -89,7 +89,7 @@ impl Error {
         }
     }
 
-    pub fn new_missing_path<P: Into<PathBuf>>(path: P) -> Self {
+    pub(crate) fn new_missing_path<P: Into<PathBuf>>(path: P) -> Self {
         Error::MissingPath(path.into())
     }
 }

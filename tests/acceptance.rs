@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 fn test_root() -> PathBuf {
-    PathBuf::from("tests/data")
+    PathBuf::from("tests").join("data")
 }
 
 mod when_dir_contents_match {
@@ -58,8 +58,7 @@ mod when_dir_contents_do_not_match {
             .lines()
             .map(str::trim)
             .filter(|l| !l.is_empty())
-            .map(ToString::to_string)
-            .map(|s| s.replace('/', &std::path::MAIN_SEPARATOR.to_string()))
+            .map(|s| s.replace("{SEP}", &std::path::MAIN_SEPARATOR.to_string()))
             .collect::<Vec<_>>();
 
         assert_eq!(actual, expected)
@@ -73,66 +72,66 @@ mod when_dir_contents_do_not_match {
     const CASE_1: TestCase = TestCase {
         dir: "extra_elements",
         expected: r#"
-            found expected file "tests/data/when_dir_contents_do_not_match/extra_elements/expected/jupiter.txt" with no counterpart in actual
-            found actual file "tests/data/when_dir_contents_do_not_match/extra_elements/actual/saturn.txt" with no counterpart in expected
+            found expected file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}extra_elements{SEP}expected{SEP}jupiter.txt" with no counterpart in actual
+            found actual file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}extra_elements{SEP}actual{SEP}saturn.txt" with no counterpart in expected
         "#,
     };
 
     const CASE_2: TestCase = TestCase {
         dir: "different_kinds",
         expected: r#"
-            comparing directories and files will not work with "tests/data/when_dir_contents_do_not_match/different_kinds/actual" and "tests/data/when_dir_contents_do_not_match/different_kinds/expected"
+            comparing directories and files will not work with "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds{SEP}actual" and "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds{SEP}expected"
         "#,
     };
 
     const CASE_3: TestCase = TestCase {
         dir: "different_contents",
         expected: r#"
-            files "tests/data/when_dir_contents_do_not_match/different_contents/actual/sun.txt" and "tests/data/when_dir_contents_do_not_match/different_contents/expected/sun.txt" differ on line 1
+            files "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_contents{SEP}actual{SEP}sun.txt" and "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_contents{SEP}expected{SEP}sun.txt" differ on line 1
         "#,
     };
 
     const CASE_4: TestCase = TestCase {
         dir: "actual_not_found",
         expected: r#"
-            path "tests/data/when_dir_contents_do_not_match/actual_not_found/actual" not found
+            path "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}actual_not_found{SEP}actual" not found
         "#,
     };
 
     const CASE_5: TestCase = TestCase {
         dir: "expected_not_found",
         expected: r#"
-            path "tests/data/when_dir_contents_do_not_match/expected_not_found/expected" not found
+            path "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}expected_not_found{SEP}expected" not found
         "#,
     };
 
     const CASE_6: TestCase = TestCase {
         dir: "extra_expected",
         expected: r#"
-            found expected file "tests/data/when_dir_contents_do_not_match/extra_expected/expected/jupiter.txt" with no counterpart in actual
+            found expected file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}extra_expected{SEP}expected{SEP}jupiter.txt" with no counterpart in actual
         "#,
     };
 
     const CASE_7: TestCase = TestCase {
         dir: "extra_actual",
         expected: r#"
-            found actual file "tests/data/when_dir_contents_do_not_match/extra_actual/actual/saturn.txt" with no counterpart in expected
+            found actual file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}extra_actual{SEP}actual{SEP}saturn.txt" with no counterpart in expected
         "#,
     };
 
     const CASE_8: TestCase = TestCase {
         dir: "different_kinds_deep",
         expected: r#"
-            comparing directories and files will not work with "tests/data/when_dir_contents_do_not_match/different_kinds_deep/expected/stars" and "tests/data/when_dir_contents_do_not_match/different_kinds_deep/actual/stars"
+            comparing directories and files will not work with "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}expected{SEP}stars" and "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}actual{SEP}stars"
         "#,
     };
 
     const CASE_9: TestCase = TestCase {
         dir: "deep",
         expected: r#"
-            found expected file "tests/data/when_dir_contents_do_not_match/deep/expected/planets/jupiter.txt" with no counterpart in actual
-            found actual file "tests/data/when_dir_contents_do_not_match/deep/actual/planets/saturn.txt" with no counterpart in expected
-            files "tests/data/when_dir_contents_do_not_match/deep/actual/sun.txt" and "tests/data/when_dir_contents_do_not_match/deep/expected/sun.txt" differ on line 0
+            found expected file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}deep{SEP}expected{SEP}planets{SEP}jupiter.txt" with no counterpart in actual
+            found actual file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}deep{SEP}actual{SEP}planets{SEP}saturn.txt" with no counterpart in expected
+            files "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}deep{SEP}actual{SEP}sun.txt" and "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}deep{SEP}expected{SEP}sun.txt" differ on line 0
         "#,
     };
 
