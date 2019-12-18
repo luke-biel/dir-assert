@@ -35,6 +35,7 @@ mod when_dir_contents_match {
 }
 
 mod when_dir_contents_do_not_match {
+    use cfg_if::cfg_if;
     use dir_assert::assert_paths;
     use std::path::PathBuf;
     use test_case::test_case;
@@ -58,10 +59,21 @@ mod when_dir_contents_do_not_match {
             .lines()
             .map(str::trim)
             .filter(|l| !l.is_empty())
-            .map(|s| s.replace("{SEP}", &std::path::MAIN_SEPARATOR.to_string()))
+            .map(|s| s.replace("{SEP}", separator()))
             .collect::<Vec<_>>();
 
         assert_eq!(actual, expected)
+    }
+
+    // For some reason windows wants double dashes
+    fn separator() -> &'static str {
+        cfg_if! {
+            if #[cfg(windows)] {
+                "\\\\"
+            } else {
+                "/"
+            }
+        }
     }
 
     struct TestCase {

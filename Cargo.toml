@@ -15,3 +15,4 @@ travis-ci = { repository = "luke-biel/dir-assert", branch = "master" }
 
 [dev-dependencies]
 test-case = "1.0.0-alpha-1"
+cfg-if = "0.1.10"
