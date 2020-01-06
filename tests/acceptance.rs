@@ -13,16 +13,17 @@ mod when_dir_contents_match {
         super::test_root().join("when_dir_contents_match")
     }
 
-    #[test_case("file"    ; "when comparing single file")]
-    #[test_case("simple"  ; "when directories contain one file each")]
-    #[test_case("deep"    ; "when files are stored inside subdirectories")]
-    #[test_case("complex" ; "when files are scattered inside dir")]
+    #[test_case("file"         ; "when comparing single file")]
+    #[test_case("simple"       ; "when directories contain one file each")]
+    #[test_case("deep"         ; "when files are stored inside subdirectories")]
+    #[test_case("complex"      ; "when files are scattered inside dir")]
+    #[test_case("file_symlink" ; "when comparing symlinked files")]
     fn is_ok(dir: &str) {
-        assert!(assert_paths(
+        assert_paths(
             test_root().join(dir).join("actual"),
-            test_root().join(dir).join("expected")
+            test_root().join(dir).join("expected"),
         )
-        .is_ok())
+        .unwrap()
     }
 
     #[test]

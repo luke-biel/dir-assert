@@ -95,7 +95,7 @@ fn compare_dir_recursive<PE: AsRef<Path>, PA: AsRef<Path>>(
                         errors.extend_from_slice(&err);
                     }
                 } else {
-                    errors.push(Error::new_invalid_comparison(a.path(), e.path()))
+                    errors.push(Error::new_invalid_comparison(e.path(), a.path()))
                 }
             }
             Ordering::Greater => {
