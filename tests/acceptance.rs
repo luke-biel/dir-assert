@@ -13,16 +13,18 @@ mod when_dir_contents_match {
         super::test_root().join("when_dir_contents_match")
     }
 
-    #[test_case("file"    ; "when comparing single file")]
-    #[test_case("simple"  ; "when directories contain one file each")]
-    #[test_case("deep"    ; "when files are stored inside subdirectories")]
-    #[test_case("complex" ; "when files are scattered inside dir")]
+    #[test_case("file"         ; "when comparing single file")]
+    #[test_case("simple"       ; "when directories contain one file each")]
+    #[test_case("deep"         ; "when files are stored inside subdirectories")]
+    #[test_case("complex"      ; "when files are scattered inside dir")]
+    #[test_case("file_symlink" ; "when comparing symlinked files")]
+    #[test_case("dir_symlink"  ; "when comparing symlinked dirs")]
     fn is_ok(dir: &str) {
-        assert!(assert_paths(
+        assert_paths(
             test_root().join(dir).join("actual"),
-            test_root().join(dir).join("expected")
+            test_root().join(dir).join("expected"),
         )
-        .is_ok())
+        .unwrap()
     }
 
     #[test]
@@ -134,7 +136,7 @@ mod when_dir_contents_do_not_match {
     const CASE_8: TestCase = TestCase {
         dir: "different_kinds_deep",
         expected: r#"
-            comparing directories and files will not work with "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}expected{SEP}stars" and "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}actual{SEP}stars"
+            comparing directories and files will not work with "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}actual{SEP}stars" and "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}expected{SEP}stars"
         "#,
     };
 
@@ -147,13 +149,32 @@ mod when_dir_contents_do_not_match {
         "#,
     };
 
-    #[test_case(CASE_1 ; "when both sides have one extra element")]
-    #[test_case(CASE_2 ; "when kinds do not match")]
-    #[test_case(CASE_3 ; "when files have different contents")]
-    #[test_case(CASE_4 ; "when actual path is missing")]
-    #[test_case(CASE_5 ; "when expected path is missing")]
-    #[test_case(CASE_8 ; "when compared items inside directory have different kind")]
-    #[test_case(CASE_9 ; "when errors come from many levels")]
+    const CASE_10: TestCase = TestCase {
+        dir: "file_symlink",
+        expected: r#"
+            files "tests/data/when_dir_contents_do_not_match/file_symlink/actual/alter.txt" and "tests/data/when_dir_contents_do_not_match/file_symlink/expected/alter.txt" differ on line 0
+        "#,
+    };
+
+    const CASE_11: TestCase = TestCase {
+        dir: "dir_symlink",
+        expected: r#"
+            found expected file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}dir_symlink{SEP}expected{SEP}alter{SEP}jupiter.txt" with no counterpart in actual
+            found actual file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}dir_symlink{SEP}actual{SEP}alter{SEP}sun.txt" with no counterpart in expected
+            found expected file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}dir_symlink{SEP}expected{SEP}planet{SEP}jupiter.txt" with no counterpart in actual
+            found actual file "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}dir_symlink{SEP}actual{SEP}planet{SEP}sun.txt" with no counterpart in expected
+        "#,
+    };
+
+    #[test_case(CASE_1  ; "when both sides have one extra element")]
+    #[test_case(CASE_2  ; "when kinds do not match")]
+    #[test_case(CASE_3  ; "when files have different contents")]
+    #[test_case(CASE_4  ; "when actual path is missing")]
+    #[test_case(CASE_5  ; "when expected path is missing")]
+    #[test_case(CASE_8  ; "when compared items inside directory have different kind")]
+    #[test_case(CASE_9  ; "when errors come from many levels")]
+    #[test_case(CASE_10 ; "when file is symlinked")]
+    #[test_case(CASE_11 ; "when dir is symlinked")]
     fn is_err(case: TestCase) {
         run(case)
     }
