@@ -18,6 +18,7 @@ mod when_dir_contents_match {
     #[test_case("deep"         ; "when files are stored inside subdirectories")]
     #[test_case("complex"      ; "when files are scattered inside dir")]
     #[test_case("file_symlink" ; "when comparing symlinked files")]
+    #[test_case("dir_symlink"  ; "when comparing symlinked dirs")]
     fn is_ok(dir: &str) {
         assert_paths(
             test_root().join(dir).join("actual"),
