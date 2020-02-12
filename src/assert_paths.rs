@@ -1,5 +1,5 @@
 use crate::Error;
-use std::fs::FileType;
+use std::fs::{metadata, FileType};
 use std::io::{BufRead, BufReader};
 use std::{
     cmp::Ordering,
@@ -95,7 +95,9 @@ fn compare_dir_recursive<PE: AsRef<Path>, PA: AsRef<Path>>(
                         errors.extend_from_slice(&err);
                     }
                 } else if e_ft.is_symlink() && a_ft.is_symlink() {
-                    // do nothing
+                    if let Err(err) = compare_symlinks(e, a) {
+                        errors.extend_from_slice(&err);
+                    }
                 } else {
                     errors.push(Error::new_invalid_comparison(e.path(), a.path()))
                 }
@@ -116,6 +118,33 @@ fn compare_dir_recursive<PE: AsRef<Path>, PA: AsRef<Path>>(
     } else {
         Err(errors)
     }
+}
+
+fn compare_symlinks(e: &DirEntry, a: &DirEntry) -> Result<(), Vec<Error>> {
+    let e_m = metadata(e.path()).map_err(|err| {
+        vec![Error::new_critical(format!(
+            "unable to retrieve metadata from expected symlink {:?}, {}",
+            e.path(),
+            err
+        ))]
+    })?;
+    let a_m = metadata(a.path()).map_err(|err| {
+        vec![Error::new_critical(format!(
+            "unable to retrieve metadata from actual symlink {:?}, {}",
+            a.path(),
+            err
+        ))]
+    })?;
+
+    if e_m.is_file() && a_m.is_file() {
+        compare_file(e.path(), a.path()).map_err(|err| vec![err])?;
+    } else if e_m.is_dir() && a_m.is_dir() {
+        compare_dir_recursive(e.path(), a.path())?;
+    } else {
+        return Err(vec![Error::new_invalid_comparison(e.path(), a.path())]);
+    }
+
+    Ok(())
 }
 
 fn get_file_type(path: &DirEntry) -> Result<FileType, Error> {
