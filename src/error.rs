@@ -93,6 +93,3 @@ impl Error {
         Error::MissingPath(path.into())
     }
 }
-
-// TODO: Test if errors created are correct, not if they **Display** correct thing
-// TODO: Test if errors are Stringified correctly
