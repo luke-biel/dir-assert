@@ -152,7 +152,7 @@ mod when_dir_contents_do_not_match {
     const CASE_10: TestCase = TestCase {
         dir: "file_symlink",
         expected: r#"
-            files "tests/data/when_dir_contents_do_not_match/file_symlink/actual/alter.txt" and "tests/data/when_dir_contents_do_not_match/file_symlink/expected/alter.txt" differ on line 0
+            files "tests{SEP}}data{SEP}}when_dir_contents_do_not_match{SEP}}file_symlink{SEP}}actual{SEP}}alter.txt" and "tests{SEP}}data{SEP}}when_dir_contents_do_not_match{SEP}}file_symlink{SEP}}expected{SEP}}alter.txt" differ on line 0
         "#,
     };
 
