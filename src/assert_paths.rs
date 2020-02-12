@@ -94,6 +94,8 @@ fn compare_dir_recursive<PE: AsRef<Path>, PA: AsRef<Path>>(
                     if let Err(err) = compare_dir_recursive(e.path(), a.path()) {
                         errors.extend_from_slice(&err);
                     }
+                } else if e_ft.is_symlink() && a_ft.is_symlink() {
+                    // do nothing
                 } else {
                     errors.push(Error::new_invalid_comparison(e.path(), a.path()))
                 }

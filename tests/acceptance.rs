@@ -135,7 +135,7 @@ mod when_dir_contents_do_not_match {
     const CASE_8: TestCase = TestCase {
         dir: "different_kinds_deep",
         expected: r#"
-            comparing directories and files will not work with "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}expected{SEP}stars" and "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}actual{SEP}stars"
+            comparing directories and files will not work with "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}actual{SEP}stars" and "tests{SEP}data{SEP}when_dir_contents_do_not_match{SEP}different_kinds_deep{SEP}expected{SEP}stars"
         "#,
     };
 
