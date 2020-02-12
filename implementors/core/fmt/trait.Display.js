@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors["dir_assert"] = [{text:"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"enum\" href=\"dir_assert/enum.Error.html\" title=\"enum dir_assert::Error\">Error</a>",synthetic:false,types:["dir_assert::error::Error"]},];
+implementors["dir_assert"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"enum\" href=\"dir_assert/enum.Error.html\" title=\"enum dir_assert::Error\">Error</a>","synthetic":false,"types":["dir_assert::error::Error"]}];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);
