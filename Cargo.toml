@@ -14,5 +14,5 @@ repository = "https://github.com/luke-biel/dir-assert"
 travis-ci = { repository = "luke-biel/dir-assert", branch = "master" }
 
 [dev-dependencies]
-test-case = "1.0.0"
+test-case = "2.2.2"
 cfg-if = "1.0.0"
