@@ -1,6 +1,6 @@
 use crate::Error;
 use std::fs::{metadata, FileType};
-use std::io::{BufRead, BufReader};
+use std::io::{BufReader, Read};
 use std::{
     cmp::Ordering,
     fs::{DirEntry, File},
@@ -195,27 +195,43 @@ fn compare_file<PE: AsRef<Path>, PA: AsRef<Path>>(expected: PE, actual: PA) -> R
     let reader_e = BufReader::new(file_e);
     let reader_a = BufReader::new(file_a);
 
-    for (idx, lines) in reader_e.lines().zip(reader_a.lines()).enumerate() {
-        let (line_e, line_a) = match lines {
-            (Ok(line_e), Ok(line_a)) => (line_e, line_a),
-            (Err(err), _) => {
-                return Err(Error::new_critical(format!(
-                    "failed reading line from {:?}, reason: {}",
-                    expected, err
-                )))
-            }
-            (_, Err(err)) => {
-                return Err(Error::new_critical(format!(
-                    "failed reading line from {:?}, reason: {}",
-                    actual, err
-                )))
-            }
-        };
+    // Read each reader in fixed sized chunks and compare them -- do not try to read line by line!
+    // Non-text files will fail to read line by line.
+    for (idx, (byte_e, byte_a)) in reader_e
+        .bytes()
+        .zip(reader_a.bytes())
+        .enumerate()
+        .filter(|(_, (byte_e, byte_a))| byte_e.is_ok() && byte_a.is_ok())
+    {
+        let (byte_e, byte_a) = (byte_e.unwrap(), byte_a.unwrap());
 
-        if line_e != line_a {
+        if byte_e != byte_a {
             return Err(Error::new_file_contents_mismatch(expected, actual, idx));
         }
     }
+
+
+    // for (idx, lines) in reader_e.lines().zip(reader_a.lines()).enumerate() {
+    //     let (line_e, line_a) = match lines {
+    //         (Ok(line_e), Ok(line_a)) => (line_e, line_a),
+    //         (Err(err), _) => {
+    //             return Err(Error::new_critical(format!(
+    //                 "failed reading line from {:?}, reason: {}",
+    //                 expected, err
+    //             )))
+    //         }
+    //         (_, Err(err)) => {
+    //             return Err(Error::new_critical(format!(
+    //                 "failed reading line from {:?}, reason: {}",
+    //                 actual, err
+    //             )))
+    //         }
+    //     };
+    //
+    //     if line_e != line_a {
+    //         return Err(Error::new_file_contents_mismatch(expected, actual, idx));
+    //     }
+    // }
 
     Ok(())
 }
